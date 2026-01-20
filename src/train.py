@@ -117,7 +117,10 @@ if __name__ == "__main__":
     print(f"Using data path: {data_path}")
 
     # Use 2 workers (processes) to simulate distributed training
-    scaling_config = ScalingConfig(num_workers=2, use_gpu=False)
+    use_gpu = torch.cuda.is_available()
+    print(f"GPU Available: {use_gpu}")
+    
+    scaling_config = ScalingConfig(num_workers=2, use_gpu=use_gpu)
 
     trainer = TorchTrainer(
         train_loop_per_worker=train_func,
