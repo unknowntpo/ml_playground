@@ -1,0 +1,5 @@
+outs:
+- md5: 83e520dadb51fe5c99900f850c8c57eb
+  size: 14412962
+  hash: md5
+  path: mnist.parquet
