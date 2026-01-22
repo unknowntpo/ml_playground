@@ -1,0 +1,48 @@
+services:
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v2.19.0
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./mlflow_data:/mlflow
+    environment:
+      - MLFLOW_BACKEND_STORE_URI=sqlite:///mlflow/mlflow.db
+      - MLFLOW_DEFAULT_ARTIFACT_ROOT=/mlflow/artifacts
+    command: >
+      mlflow server
+      --host 0.0.0.0
+      --port 5000
+      --backend-store-uri sqlite:///mlflow/mlflow.db
+      --default-artifact-root /mlflow/artifacts
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  ray-head:
+    image: rayproject/ray:2.44.1-py312-aarch64
+    ports:
+      - "8265:8265"  # Ray Dashboard
+      - "6379:6379"  # Ray GCS
+      - "10001:10001"  # Ray Client
+    shm_size: "4gb"
+    volumes:
+      - ./:/app
+      - ./ray_results:/tmp/ray
+    working_dir: /app
+    command: >
+      bash -c "pip install polars mlflow==2.19.0 &&
+      pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu &&
+      ray start --head --port=6379 --dashboard-host=0.0.0.0 --block"
+    environment:
+      - RAY_ADDRESS=auto
+    healthcheck:
+      test: ["CMD", "ray", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mlflow_data:
+  ray_results:

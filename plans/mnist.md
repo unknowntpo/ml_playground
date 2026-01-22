@@ -24,12 +24,12 @@ This project aims to demonstrate a machine learning workflow using the MNIST dat
 - [x] Initialize DVC: `dvc init`
 - [x] Configure local storage for DVC (simulation of remote).
 - [x] Create a script/notebook to download MNIST data raw files.
-- [ ] Add data to DVC: `dvc add data/raw/mnist.parquet`
-- [ ] Commit DVC files to git.
+- [x] Add data to DVC: `dvc add data/raw/mnist.parquet`
+- [x] Commit DVC files to git.
 
 ### 3. Model & Training Implementation (Ray + PyTorch)
-- [ ] Create `src/model.py`: Define a simple CNN for MNIST.
-- [ ] Create `src/train.py`:
+- [x] Create `src/model.py`: Define a simple CNN for MNIST.
+- [x] Create `src/train.py`:
     - Implement a Ray Train `train_loop_per_worker`.
     - Handle data loading (integration with DVC-managed paths).
     - Initialize the model, loss, and optimizer.
